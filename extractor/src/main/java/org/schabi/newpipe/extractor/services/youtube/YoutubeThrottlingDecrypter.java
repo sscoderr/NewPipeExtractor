@@ -36,6 +36,25 @@ import javax.annotation.Nonnull;
  */
 public final class YoutubeThrottlingDecrypter {
 
+    private static final String SINGLE_CHAR_VARIABLE_REGEX = "[a-zA-Z0-9$_]";
+
+    private static final String FUNCTION_NAME_REGEX = SINGLE_CHAR_VARIABLE_REGEX + "+";
+
+    private static final String ARRAY_ACCESS_REGEX = "\\[(\\d+)]";
+
+    private static final Pattern DEOBFUSCATION_FUNCTION_NAME_PATTERN = Pattern.compile(
+            // CHECKSTYLE:OFF
+            "\\(" + SINGLE_CHAR_VARIABLE_REGEX + "=String\\.fromCharCode\\(110\\)," + SINGLE_CHAR_VARIABLE_REGEX +
+            "=" + SINGLE_CHAR_VARIABLE_REGEX + "\\.get\\(" + SINGLE_CHAR_VARIABLE_REGEX + "\\)\\)" +
+            "&&\\(" + SINGLE_CHAR_VARIABLE_REGEX + "=(" + FUNCTION_NAME_REGEX + ")" +
+            "(?:" + ARRAY_ACCESS_REGEX + ")?\\(" + SINGLE_CHAR_VARIABLE_REGEX + "\\)");
+
+    /**
+     * Match this, where we want BDa
+     * Array access is optional, but needs to be handled, since the actual function is inside the array
+     * a.D&&(b=String.fromCharCode(110),c=a.get(b))&&(c=<strong>BDa</strong></strong><strong>[0]</strong>(c),a.set(b,c),BDa.length||jma(""))}};
+     */
+
     private static final Pattern N_PARAM_PATTERN = Pattern.compile("[&?]n=([^&]+)");
     private static final Pattern DECRYPT_FUNCTION_NAME_PATTERN = Pattern.compile(
             // CHECKSTYLE:OFF
