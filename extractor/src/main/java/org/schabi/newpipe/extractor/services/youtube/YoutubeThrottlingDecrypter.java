@@ -49,6 +49,7 @@ public final class YoutubeThrottlingDecrypter {
             "&&\\(" + SINGLE_CHAR_VARIABLE_REGEX + "=(" + FUNCTION_NAME_REGEX + ")" +
             "(?:" + ARRAY_ACCESS_REGEX + ")?\\(" + SINGLE_CHAR_VARIABLE_REGEX + "\\)");
 
+    //
     /**
      * Match this, where we want BDa
      * Array access is optional, but needs to be handled, since the actual function is inside the array
